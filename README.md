@@ -1,1 +1,1 @@
-# Modal with animation in React
+# Modal with animations in React
