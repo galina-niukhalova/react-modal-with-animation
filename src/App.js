@@ -1,8 +1,10 @@
 import React, { Fragment } from "react";
-import Modal from "./components/Modal";
 import { createGlobalStyle } from "styled-components";
-import colorPalette from "./styles/colorPalette";
-import { fontStyle } from "./styles/fonts";
+
+import HomePage from 'pages/HomePage'
+
+import colorPalette from "styles/colorPalette";
+import { fontStyle } from "styles/fonts";
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -33,7 +35,7 @@ function App() {
   return (
     <Fragment>
       <GlobalStyle />
-      <Modal />
+      <HomePage />
     </Fragment>
   );
 }
