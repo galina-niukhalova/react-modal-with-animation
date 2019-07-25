@@ -3,10 +3,13 @@ import { createPortal } from "react-dom";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
+import { animationTime, animationKeyframes } from "styles/animations";
+import colorPalette from "styles/colorPalette";
 import CloseButton from "components/CloseButton";
 
-function Modal({ open, close }) {
+function Modal({ open, close, animationType }) {
   const [modalDomElement, setModalDomElement] = useState();
+  const [animationState, setAnimationState] = useState(null);
 
   useEffect(() => {
     const domElement = document.createElement("div");
@@ -18,12 +21,22 @@ function Modal({ open, close }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (open !== null) {
+      open ? setAnimationState("Enter") : setAnimationState("Leave");
+    }
+  }, [open]);
+
   if (!modalDomElement) {
     return null;
   }
 
   return createPortal(
-    <Modal.Container open={open}>
+    <Modal.Container
+      open={open}
+      animationState={animationState}
+      animationType={animationType}
+    >
       <CloseButton
         position={{ top: "2.4rem", right: "2.4rem" }}
         onClick={close}
@@ -35,16 +48,24 @@ function Modal({ open, close }) {
 }
 
 Modal.Container = styled.div`
-  ${({ open }) => css`
-    visibility: ${open ? "visible" : "hidden"};
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background-color: #ffd;
-  `}
+  ${({ animationState, animationType }) => {
+    const animationKeyframe =
+      animationKeyframes[`${animationType}${animationState}`];
+
+    return css`
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      right: 0;
+      z-index: 100;
+      background-color: #fff;
+      border: 1px solid ${colorPalette.grey};
+      transform: translate3d(100%, 0, 0);
+
+      animation: ${animationKeyframe} ${animationTime.normal} forwards;
+    `;
+  }}
 `;
 
 Modal.Body = styled.div`
@@ -57,7 +78,12 @@ Modal.Body = styled.div`
 
 Modal.propTypes = {
   open: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired
+  close: PropTypes.func.isRequired,
+  animationType: PropTypes.oneOf["slideRight"]
+};
+
+Modal.defaultProps = {
+  animationType: "slideRight"
 };
 
 export default Modal;

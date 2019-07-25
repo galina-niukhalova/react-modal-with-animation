@@ -5,7 +5,7 @@ import Button from "components/Button";
 import FlexContainer from "components/FlexContainer";
 
 function HomePage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(null);
 
   return (
     <Fragment>
