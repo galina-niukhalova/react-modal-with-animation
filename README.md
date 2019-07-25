@@ -1,1 +1,1 @@
-# react-modal-with-animation
+# Modal with animation in React
