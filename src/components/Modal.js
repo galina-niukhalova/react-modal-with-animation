@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { createPortal } from "react-dom";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
 import { animationTime, animationKeyframes } from "styles/animations";
 import colorPalette from "styles/colorPalette";
+
 import CloseButton from "components/CloseButton";
+import Backdrop from "components/Backdrop";
 
 function Modal({ open, close, animationType }) {
   const [modalDomElement, setModalDomElement] = useState();
@@ -32,17 +34,20 @@ function Modal({ open, close, animationType }) {
   }
 
   return createPortal(
-    <Modal.Container
-      open={open}
-      animationState={animationState}
-      animationType={animationType}
-    >
-      <CloseButton
-        position={{ top: "2.4rem", right: "2.4rem" }}
-        onClick={close}
-      />
-      <Modal.Body>I'm modal</Modal.Body>
-    </Modal.Container>,
+    <Fragment>
+      {open && <Backdrop onClick={close}/>}
+      <Modal.Container
+        open={open}
+        animationState={animationState}
+        animationType={animationType}
+      >
+        <CloseButton
+          position={{ top: "2.4rem", right: "2.4rem" }}
+          onClick={close}
+        />
+        <Modal.Body>I'm modal</Modal.Body>
+      </Modal.Container>
+    </Fragment>,
     modalDomElement
   );
 }
@@ -58,7 +63,7 @@ Modal.Container = styled.div`
       bottom: 0;
       left: 50%;
       right: 0;
-      z-index: 100;
+      z-index: 101;
       background-color: #fff;
       border: 1px solid ${colorPalette.grey};
       transform: translate3d(100%, 0, 0);
