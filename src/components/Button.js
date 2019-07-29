@@ -9,9 +9,12 @@ const Button = ({ children, onClick }) => (
 );
 
 Button.Container = styled.button`
-  font-size: 1.4rem;
-  padding: 0.4rem 0.8rem;
+  font-size: 1.6rem;
+  padding: 0.8rem 2rem;
+  width: 12.0rem;
   border-radius: 4px;
+  border: none;
+  box-shadow: 0 0 4px rgba(0, 0, 0, .1);
   background-color: ${colorPalette.white};
   cursor: pointer;
   outline: none;

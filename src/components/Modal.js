@@ -1,17 +1,73 @@
+/* eslint-disable default-case */
 import React, { useEffect, useState, Fragment } from "react";
 import { createPortal } from "react-dom";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
-import { animationTime, animationKeyframes } from "styles/animations";
-import colorPalette from "styles/colorPalette";
-
 import CloseButton from "components/CloseButton";
 import Backdrop from "components/Backdrop";
 
+const mapTypeToStyle = {
+  slideRight: {
+    position: {
+      top: "0",
+      right: "0"
+    },
+    transform: {
+      from: "translateX(100%)",
+      to: "translateX(0)"
+    },
+    size: {
+      width: "300px",
+      height: "100%"
+    }
+  },
+  slideLeft: {
+    position: {
+      top: "0",
+      left: "0"
+    },
+    transform: {
+      from: "translateX(-100%)",
+      to: "translateX(0)"
+    },
+    size: {
+      width: "300px",
+      height: "100%"
+    }
+  },
+  slideUp: {
+    position: {
+      top: "0",
+      left: "0"
+    },
+    transform: {
+      from: "translateY(-100%)",
+      to: "translateY(0)"
+    },
+    size: {
+      width: "100%",
+      height: "200px"
+    }
+  },
+  slideDown: {
+    position: {
+      bottom: "0",
+      left: "0"
+    },
+    transform: {
+      from: "translateY(100%)",
+      to: "translateY(0)"
+    },
+    size: {
+      width: "100%",
+      height: "200px"
+    }
+  }
+};
+
 function Modal({ open, close, animationType }) {
   const [modalDomElement, setModalDomElement] = useState();
-  const [animationState, setAnimationState] = useState(null);
 
   useEffect(() => {
     const domElement = document.createElement("div");
@@ -23,23 +79,20 @@ function Modal({ open, close, animationType }) {
     };
   }, []);
 
-  useEffect(() => {
-    if (open !== null) {
-      open ? setAnimationState("Enter") : setAnimationState("Leave");
-    }
-  }, [open]);
-
   if (!modalDomElement) {
     return null;
   }
 
+  const { position, transform, size } = mapTypeToStyle[animationType];
+
   return createPortal(
     <Fragment>
-      {open && <Backdrop onClick={close}/>}
+      {open && <Backdrop onClick={close} />}
       <Modal.Container
         open={open}
-        animationState={animationState}
-        animationType={animationType}
+        position={position}
+        transform={transform}
+        size={size}
       >
         <CloseButton
           position={{ top: "2.4rem", right: "2.4rem" }}
@@ -53,22 +106,25 @@ function Modal({ open, close, animationType }) {
 }
 
 Modal.Container = styled.div`
-  ${({ animationState, animationType }) => {
-    const animationKeyframe =
-      animationKeyframes[`${animationType}${animationState}`];
-
+  ${({
+    open,
+    position: { top, bottom, left, right },
+    transform: { from, to },
+    size: { width, height }
+  }) => {
     return css`
       position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      right: 0;
+      ${top && `top: ${top};`}
+      ${bottom && `bottom: ${bottom};`}
+      ${left && `left: ${left};`}
+      ${right && `right: ${right};`}
+      width: ${width};
+      height: ${height};
       z-index: 101;
-      background-color: #fff;
-      border: 1px solid ${colorPalette.grey};
-      transform: translate3d(100%, 0, 0);
-
-      animation: ${animationKeyframe} ${animationTime.normal} forwards;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      transform: ${!open ? from : to};
+      transition: 0.2s;
     `;
   }}
 `;
@@ -82,9 +138,14 @@ Modal.Body = styled.div`
 `;
 
 Modal.propTypes = {
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
   close: PropTypes.func.isRequired,
-  animationType: PropTypes.oneOf["slideRight"]
+  animationType: PropTypes.oneOf([
+    "slideRight",
+    "slideLeft",
+    "slideUp",
+    "slideDown"
+  ])
 };
 
 Modal.defaultProps = {
