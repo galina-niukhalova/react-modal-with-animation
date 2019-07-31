@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 
 import colorPalette from "styles/colorPalette";
 
-const Button = ({ children, onClick }) => (
+const Button = ({ children, onClick }: ButtonProps) => (
   <Button.Container onClick={onClick}>{children}</Button.Container>
 );
 
@@ -26,9 +25,9 @@ Button.Container = styled.button`
   }
 `;
 
-Button.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-  onClick: PropTypes.func.isRequired
-};
+interface ButtonProps {
+  onClick(): void,
+  children: string | React.ReactNode,
+}
 
 export default Button;

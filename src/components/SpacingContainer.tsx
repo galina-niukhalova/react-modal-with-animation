@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import PropTypes from 'prop-types'
 
 const SpacingContainer = ({
   margin,
@@ -13,10 +12,10 @@ const SpacingContainer = ({
   paddingRight,
   paddingBottom,
   paddingLeft,
-  display,
+  display = 'block',
   children,
   width,
-}) => (
+}: SpacingContainerProps) => (
   <SpacingContainer.Container
     margin={margin}
     marginTop={marginTop}
@@ -49,8 +48,7 @@ SpacingContainer.Container = styled.div`
     padding,
     display,
     width,
-    theme: { spacing },
-  }) => css`
+  }: SpacingContainerStyleProps) => css`
     ${marginTop && `margin-top: ${marginTop};`}
     ${marginRight && `margin-right: ${marginRight};`}
     ${marginBottom && `margin-bottom: ${marginBottom};`}
@@ -66,24 +64,23 @@ SpacingContainer.Container = styled.div`
 `}
 `
 
-SpacingContainer.propTypes = {
-  margin: PropTypes.string,
-  marginTop: PropTypes.string,
-  marginRight: PropTypes.string,
-  marginBottom: PropTypes.string,
-  marginLeft: PropTypes.string,
-  padding: PropTypes.string,
-  paddingTop: PropTypes.string,
-  paddingRight: PropTypes.string,
-  paddingBottom: PropTypes.string,
-  paddingLeft: PropTypes.string,
-  display: PropTypes.oneOf(['block', 'inline', 'inline-block']),
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  width: PropTypes.string,
+interface SpacingContainerStyleProps {
+  margin?: string, 
+  marginTop?: string, 
+  marginRight?: string, 
+  marginBottom?: string, 
+  marginLeft?: string, 
+  padding?: string,
+  paddingTop?: string,
+  paddingRight?: string,
+  paddingBottom?: string,
+  paddingLeft?: string,
+  display: 'block' | 'inline' | 'inline-block',
+  width: string,
 }
 
-SpacingContainer.defaultProps = {
-  display: 'block',
+interface SpacingContainerProps extends SpacingContainerStyleProps {
+  children: string | React.ReactNode,
 }
 
 export default SpacingContainer

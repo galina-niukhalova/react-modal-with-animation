@@ -1,10 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 
 import Icon from "components/Icon";
+import { PositionType } from 'types'
 
-function CloseButton({ position, onClick }) {
+function CloseButton({ position, onClick }: CloseButtonProps) {
   return (
     <CloseButton.Container position={position} onClick={onClick}>
       <Icon name="close" />
@@ -13,7 +13,7 @@ function CloseButton({ position, onClick }) {
 }
 
 CloseButton.Container = styled.div`
-  ${({ position: { top, bottom, left, right } }) => css`
+  ${({ position: { top, bottom, left, right } }: CloseButtonProps) => css`
     position: absolute;
     ${top && `top: ${top};`}
     ${bottom && `bottom: ${bottom};`}
@@ -24,21 +24,9 @@ CloseButton.Container = styled.div`
   `}
 `;
 
-CloseButton.propTypes = {
-  position: PropTypes.shape({
-    top: PropTypes.string,
-    bottom: PropTypes.string,
-    left: PropTypes.string,
-    right: PropTypes.string
-  }),
-  onClick: PropTypes.func.isRequired
-};
-
-CloseButton.defaultProps = {
-  position: {
-    top: "0",
-    left: "0"
-  }
-};
+interface CloseButtonProps {
+  position: PositionType,
+  onClick(): void,
+}
 
 export default CloseButton;

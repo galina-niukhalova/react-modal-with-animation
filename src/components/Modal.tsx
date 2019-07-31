@@ -1,13 +1,14 @@
-/* eslint-disable default-case */
 import React, { useEffect, useState, Fragment } from "react";
 import { createPortal } from "react-dom";
 import styled, { css } from "styled-components";
-import PropTypes from "prop-types";
 
 import CloseButton from "components/CloseButton";
 import Backdrop from "components/Backdrop";
+import { PositionType } from 'types'
 
-const mapTypeToStyle = {
+const mapTypeToStyle: {
+  [key in ModalTypes]: ModalStylesProps
+} = {
   slideRight: {
     position: {
       top: "0",
@@ -66,7 +67,7 @@ const mapTypeToStyle = {
   }
 };
 
-function Modal({ open, close, animationType }) {
+function Modal({ open, close, animationType = 'slideRight' }: ModalProps) {
   const [modalDomElement, setModalDomElement] = useState();
 
   useEffect(() => {
@@ -87,7 +88,7 @@ function Modal({ open, close, animationType }) {
 
   return createPortal(
     <Fragment>
-      {open && <Backdrop onClick={close} />}
+      {open && <Backdrop />}
       <Modal.Container
         open={open}
         position={position}
@@ -107,11 +108,11 @@ function Modal({ open, close, animationType }) {
 
 Modal.Container = styled.div`
   ${({
-    open,
-    position: { top, bottom, left, right },
-    transform: { from, to },
-    size: { width, height }
-  }) => {
+  open,
+  position: { top, bottom, left, right },
+  transform: { from, to },
+  size: { width, height },
+}: ModalContainerProps) => {
     return css`
       position: fixed;
       ${top && `top: ${top};`}
@@ -137,19 +138,22 @@ Modal.Body = styled.div`
   padding: 2rem 4rem;
 `;
 
-Modal.propTypes = {
-  open: PropTypes.bool,
-  close: PropTypes.func.isRequired,
-  animationType: PropTypes.oneOf([
-    "slideRight",
-    "slideLeft",
-    "slideUp",
-    "slideDown"
-  ])
-};
+type ModalTypes = 'slideRight' | 'slideLeft' | 'slideUp' | 'slideDown'
 
-Modal.defaultProps = {
-  animationType: "slideRight"
-};
+interface ModalProps {
+  open: boolean,
+  close(): void,
+  animationType: ModalTypes
+}
+
+interface ModalStylesProps {
+  position: PositionType,
+  transform: { from: string, to: string },
+  size: { width: string, height: string }
+}
+
+interface ModalContainerProps extends ModalStylesProps {
+  open: boolean,
+}
 
 export default Modal;

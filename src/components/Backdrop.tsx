@@ -1,10 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled from 'styled-components'
 
-function Backdrop({ onClick }) {
-  return <Backdrop.Container onClick={onClick} />;
-}
+const Backdrop = ({ onClick }: BackdropProps) => (
+  <Backdrop.Container onClick={onClick} />
+)
 
 Backdrop.Container = styled.div`
   top: 0;
@@ -16,8 +15,8 @@ Backdrop.Container = styled.div`
   background: rgba(0, 0, 0, 0.3);
 `;
 
-Backdrop.propTypes = {
-  onClick: PropTypes.func.isRequired,
+interface BackdropProps {
+  onClick(): void,
 }
 
 export default Backdrop.Container;
